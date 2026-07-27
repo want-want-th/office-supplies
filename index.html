@@ -6,27 +6,23 @@
     <title>ระบบเบิกอุปกรณ์สำนักงาน - Want Want Thailand</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #c8102e;
-            --primary-hover: #9b0b21;
-            --bg-color: #f8f9fa;
-            --text: #212529;
-            --border: #dee2e6;
-        }
+        :root { --primary: #c8102e; --primary-hover: #9b0b21; --bg-color: #f8f9fa; --text: #212529; --border: #dee2e6; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text); padding: 20px; min-height: 100vh; }
-        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--primary); padding-bottom: 15px; }
         .header h1 { color: var(--primary); font-size: 24px; margin-top: 10px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; }
-        .item-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .item-card { background: #fdfdfd; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 12px; position: relative; }
+        .item-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+        .item-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: #fff; width: 100%; font-size: 16px; margin-top: 15px; }
         .btn-primary:hover { background: var(--primary-hover); }
-        .btn-add { background: #e9ecef; color: var(--text); }
-        .btn-remove { background: #dc3545; color: #fff; padding: 5px 12px; border-radius: 4px; }
+        .btn-add { background: #e9ecef; color: var(--text); width: 100%; }
+        .btn-remove { background: #dc3545; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; position: absolute; top: 10px; right: 10px; }
         .alert { padding: 12px; border-radius: 6px; margin-bottom: 15px; display: none; }
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     </style>
@@ -39,44 +35,63 @@
         <p style="color: #6c757d;">บริษัท วอนท์ วอนท์ (ประเทศไทย) จำกัด</p>
     </div>
 
-    <div id="alertMsg" class="alert alert-success">ส่งรายการสั่งซื้อเรียบร้อยแล้ว!</div>
+    <div id="alertMsg" class="alert alert-success">บันทึกรายการสั่งซื้อเรียบร้อยแล้ว!</div>
 
     <form id="requisitionForm">
         <div class="form-group">
-            <label>รหัสพนักงาน / Employee ID *</label>
-            <input type="text" id="empId" required placeholder="เช่น WW1024">
-        </div>
-        <div class="form-group">
-            <label>ชื่อ-นามสกุล / Full Name *</label>
+            <label>ชื่อ-นามสกุล ผู้ขอเบิก (Requester Name) *</label>
             <input type="text" id="empName" required placeholder="เช่น สมชาย ใจดี">
         </div>
         <div class="form-group">
-            <label>แผนก / Department *</label>
+            <label>แผนก (Department) *</label>
             <select id="department" required>
                 <option value="">-- กรุณาเลือกแผนก --</option>
-                <option value="Accounting & Finance">Accounting & Finance</option>
-                <option value="Audit & Internal Control">Audit & Internal Control</option>
-                <option value="Sales & Marketing">Sales & Marketing</option>
+                <option value="Product and Marketing Management">Product and Marketing Management</option>
+                <option value="Finance">Finance</option>
+                <option value="Logistics">Logistics</option>
+                <option value="Sales">Sales</option>
                 <option value="Human Resources">Human Resources</option>
-                <option value="Supply Chain & Logistics">Supply Chain & Logistics</option>
+                <option value="Regulatory Affairs and Quality Assurance">Regulatory Affairs and Quality Assurance</option>
+                <option value="IT">IT</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>รายการที่ต้องการเบิก *</label>
+            <label>รายการอุปกรณ์ที่ต้องการเบิก *</label>
             <div id="itemsContainer">
-                <div class="item-row">
-                    <input type="text" class="item-name" placeholder="ชื่ออุปกรณ์ (เช่น ปากกาลูกลื่นสีส้ม)" required>
-                    <input type="number" class="item-qty" min="1" value="1" style="width: 100px;" required>
-                    <button type="button" class="btn btn-remove" onclick="removeItem(this)">✕</button>
+                <div class="item-card">
+                    <button type="button" class="btn btn-remove" onclick="removeItem(this)">ลบรายการ</button>
+                    <div class="item-grid">
+                        <div>
+                            <input type="text" class="item-name" placeholder="ชื่ออุปกรณ์ / รายละเอียด" required>
+                        </div>
+                        <div>
+                            <input type="number" class="item-qty" min="1" value="1" placeholder="จำนวน" required>
+                        </div>
+                        <div>
+                            <select class="item-unit" required>
+                                <option value="ชิ้น">ชิ้น</option>
+                                <option value="ลัง">ลัง</option>
+                                <option value="แพ็ค">แพ็ค</option>
+                                <option value="กล่อง">กล่อง</option>
+                                <option value="เล่ม">เล่ม</option>
+                                <option value="โหล">โหล</option>
+                                <option value="รีม">รีม</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="item-links">
+                        <input type="url" class="item-ofm" placeholder="ลิงก์สินค้า OFM / เว็บไซต์ (ถ้ามี)">
+                        <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ)">
+                    </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-add" onclick="addItem()">+ เพิ่มรายการ</button>
+            <button type="button" class="btn btn-add" onclick="addItem()">+ เพิ่มรายการอุปกรณ์</button>
         </div>
 
         <div class="form-group">
-            <label>หมายเหตุเพิ่มเติม</label>
-            <textarea id="remark" rows="2" placeholder="เช่น ด่วนมาก / ใช้สำหรับจัดสัมมนา"></textarea>
+            <label>หมายเหตุเพิ่มเติม (Remarks)</label>
+            <textarea id="remark" rows="2" placeholder="เช่น ด่วนมาก / ใช้สำหรับจัดงานสัมมนา"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary" id="submitBtn">ส่งรายการเบิกอุปกรณ์</button>
@@ -85,23 +100,40 @@
 
 <script>
     // 🛑 นำ Web App URL ที่ได้จาก Google Apps Script มาวางแทนที่บรรทัดนี้
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnLCMGVTpOim7CzeAM2N_4ltImj73MbQKOrV6R4GJw3Qd-HZE72qkCD8Py5Gh_isKY/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEKqIMG_GeWwhRza27LgYnwkALPX7xdTBczzcuTzCds4_oeFRxVmmMlyNW1uEp5Os9/exec";
 
     function addItem() {
         const container = document.getElementById('itemsContainer');
         const div = document.createElement('div');
-        div.className = 'item-row';
+        div.className = 'item-card';
         div.innerHTML = `
-            <input type="text" class="item-name" placeholder="ชื่ออุปกรณ์" required>
-            <input type="number" class="item-qty" min="1" value="1" style="width: 100px;" required>
-            <button type="button" class="btn btn-remove" onclick="removeItem(this)">✕</button>
+            <button type="button" class="btn btn-remove" onclick="removeItem(this)">ลบรายการ</button>
+            <div class="item-grid">
+                <div><input type="text" class="item-name" placeholder="ชื่ออุปกรณ์ / รายละเอียด" required></div>
+                <div><input type="number" class="item-qty" min="1" value="1" placeholder="จำนวน" required></div>
+                <div>
+                    <select class="item-unit" required>
+                        <option value="ชิ้น">ชิ้น</option>
+                        <option value="ลัง">ลัง</option>
+                        <option value="แพ็ค">แพ็ค</option>
+                        <option value="กล่อง">กล่อง</option>
+                        <option value="เล่ม">เล่ม</option>
+                        <option value="โหล">โหล</option>
+                        <option value="รีม">รีม</option>
+                    </select>
+                </div>
+            </div>
+            <div class="item-links">
+                <input type="url" class="item-ofm" placeholder="ลิงก์สินค้า OFM / เว็บไซต์ (ถ้ามี)">
+                <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ)">
+            </div>
         `;
         container.appendChild(div);
     }
 
     function removeItem(btn) {
-        const rows = document.querySelectorAll('.item-row');
-        if(rows.length > 1) {
+        const cards = document.querySelectorAll('.item-card');
+        if(cards.length > 1) {
             btn.parentElement.remove();
         } else {
             alert('ต้องมีอย่างน้อย 1 รายการครับ');
@@ -113,18 +145,20 @@
         
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "กำลังส่งข้อมูล...";
+        submitBtn.innerText = "กำลังบันทึกข้อมูล...";
 
         const items = [];
-        document.querySelectorAll('.item-row').forEach(row => {
+        document.querySelectorAll('.item-card').forEach(card => {
             items.push({
-                name: row.querySelector('.item-name').value,
-                qty: row.querySelector('.item-qty').value
+                name: card.querySelector('.item-name').value,
+                qty: card.querySelector('.item-qty').value,
+                unit: card.querySelector('.item-unit').value,
+                ofmLink: card.querySelector('.item-ofm').value,
+                imageUrl: card.querySelector('.item-img').value
             });
         });
 
         const payload = {
-            empId: document.getElementById('empId').value,
             empName: document.getElementById('empName').value,
             department: document.getElementById('department').value,
             items: items,
