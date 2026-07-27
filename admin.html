@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement Admin Dashboard - Want Want Thailand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #c8102e; --bg-color: #f4f6f9; --text: #212529; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; }
+        body { background-color: var(--bg-color); padding: 20px; }
+        
+        /* หน้า Login ล็อครหัสผ่าน */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 999;
+        }
+        .login-box { background: #fff; padding: 30px; border-radius: 10px; width: 350px; text-align: center; }
+        .login-box input { width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 6px; }
+        .login-box button { width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+
+        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--primary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #dee2e6; text-align: left; font-size: 14px; }
+        th { background: #f8f9fa; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .badge-pending { background: #ffeba2; color: #856404; }
+    </style>
+</head>
+<body>
+
+<!-- หน้าต่างใส่รหัสผ่านก่อนเข้าใช้งาน -->
+<div id="loginOverlay">
+    <div class="login-box">
+        <h2>🔒 สำหรับฝ่ายจัดซื้อ</h2>
+        <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ</p>
+        <input type="password" id="passInput" placeholder="รหัสผ่าน...">
+        <button onclick="checkPass()">เข้าสู่ระบบ</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h2>🛠️ Procurement Admin Dashboard</h2>
+        <span style="font-size: 14px; color: #6c757d;">สำหรับตรวจเช็กรายการสั่งซื้อ</span>
+    </div>
+
+    <p style="color: #6c757d; font-size: 14px;">รายการสั่งซื้อเบิกอุปกรณ์ทั้งหมดจะถูกบันทึกลงใน Google Sheet อัตโนมัติ สามารถกดปุ่มเพื่อเข้าไปตรวจสอบข้อมูลจริงได้ที่นี่:</p>
+    
+    <div style="margin-top: 20px;">
+        <!-- 🛑 เปลี่ยน URL ด้านล่างเป็น ลิงก์ Google Sheet ของคุณ -->
+        <a href="https://script.google.com/macros/s/AKfycbxnLCMGVTpOim7CzeAM2N_4ltImj73MbQKOrV6R4GJw3Qd-HZE72qkCD8Py5Gh_isKY/exec" target="_blank" style="display: inline-block; padding: 12px 24px; background: #198754; color: white; text-decoration: none; border-radius: 6px; font-weight: 600;">
+            📊 เปิดไฟล์ Google Sheets ดูข้อมูลรายการทั้งหมด
+        </a>
+    </div>
+</div>
+
+<script>
+    // 🔑 ตั้งรหัสผ่านเข้าหน้า Admin ที่นี่ (เปลี่ยนตามต้องการ)
+    const ADMIN_PASSWORD = "adminwantwant";
+
+    function checkPass() {
+        const input = document.getElementById('passInput').value;
+        if(input === ADMIN_PASSWORD) {
+            document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+            alert('รหัสผ่านไม่ถูกต้อง!');
+        }
+    }
+</script>
+</body>
+</html>
