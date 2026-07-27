@@ -22,11 +22,11 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--primary); }
         .table-responsive { overflow-x: auto; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th, td { padding: 10px; border: 1px solid #dee2e6; text-align: left; font-size: 13px; }
+        th, td { padding: 10px; border: 1px solid #dee2e6; text-align: left; font-size: 13px; word-break: break-word; }
         th { background: #f8f9fa; font-weight: 600; }
         .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
         .btn-refresh { background: #0d6efd; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
-        .btn-sheet { background: #198754; color: white; border: none; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; }
+        .btn-sheet { background: #198754; color: white; border: none; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -45,7 +45,8 @@
         <h2>🛠️ Procurement Real-time Dashboard</h2>
         <div>
             <button class="btn-refresh" onclick="loadData()">🔄 โหลดข้อมูลใหม่</button>
-            <a href="https://script.google.com/macros/s/AKfycbzEKqIMG_GeWwhRza27LgYnwkALPX7xdTBczzcuTzCds4_oeFRxVmmMlyNW1uEp5Os9/exec" target="_blank" class="btn-sheet">📊 เปิด Google Sheets</a>
+            <!-- 🛑 อย่าลืมใส่ URL Google Sheets ของคุณที่ href ด้านล่างนี้ -->
+            <a href="https://docs.google.com/spreadsheets/d/1M6A4MyIufBwwMUy7kOsoD0ZwPFVpd140UtWTtLV8tBg/edit?usp=sharing" target="_blank" class="btn-sheet">📊 เปิด Google Sheets</a>
         </div>
     </div>
 
@@ -73,8 +74,8 @@
 
 <script>
     const ADMIN_PASSWORD = "adminwantwant";
-    // 🛑 วาง Web App URL เดียวกับหน้า index.html ที่นี่
-    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+    // 🛑 อย่าลืมใส่ Web App URL ที่นี่
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEKqIMG_GeWwhRza27LgYnwkALPX7xdTBczzcuTzCds4_oeFRxVmmMlyNW1uEp5Os9/exec";
 
     function checkPass() {
         if(document.getElementById('passInput').value === ADMIN_PASSWORD) {
@@ -85,48 +86,54 @@
         }
     }
 
+    // ฟังก์ชันดึงข้อมูลแบบ JSONP เพื่อข้ามขีดจำกัด CORS ของเบราว์เซอร์
     function loadData() {
         const tbody = document.getElementById('dataTable');
         tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">กำลังโหลดข้อมูลล่าสุด...</td></tr>';
 
-        fetch(GOOGLE_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => {
-                if(!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">ยังไม่มีรายการสั่งซื้อ</td></tr>';
-                    return;
-                }
-                
-                let html = '';
-                // เรียงลำดับจากรายการล่าสุดขึ้นก่อน
-                data.reverse().forEach(row => {
-                    let media = '-';
-                    if(row.imageUrl) {
-                        media = `<a href="${row.imageUrl}" target="_blank"><img src="${row.imageUrl}" class="img-preview" alt="รูปภาพ"></a>`;
-                    }
-                    if(row.ofmLink) {
-                        media += `<br><a href="${row.ofmLink}" target="_blank" style="font-size:11px;">[เว็บ OFM]</a>`;
-                    }
+        const oldScript = document.getElementById('jsonpScript');
+        if (oldScript) oldScript.remove();
 
-                    html += `
-                        <tr>
-                            <td><b>${row.requestId}</b></td>
-                            <td>${row.date}</td>
-                            <td>${row.requesterName}</td>
-                            <td>${row.department}</td>
-                            <td>${row.itemName}</td>
-                            <td><b>${row.qty}</b></td>
-                            <td>${row.unit}</td>
-                            <td>${media}</td>
-                            <td>${row.remarks || '-'}</td>
-                        </tr>
-                    `;
-                });
-                tbody.innerHTML = html;
-            })
-            .catch(err => {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+        window.handleData = function(data) {
+            if(!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">ยังไม่มีรายการสั่งซื้อ</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            data.reverse().forEach(row => {
+                let media = '-';
+                if(row.imageUrl) {
+                    media = `<a href="${row.imageUrl}" target="_blank"><img src="${row.imageUrl}" class="img-preview" alt="รูปภาพ"></a>`;
+                }
+                if(row.ofmLink) {
+                    media = media === '-' ? `<a href="${row.ofmLink}" target="_blank" style="font-size:11px;">[เว็บ OFM]</a>` : media + `<br><a href="${row.ofmLink}" target="_blank" style="font-size:11px;">[เว็บ OFM]</a>`;
+                }
+
+                html += `
+                    <tr>
+                        <td><b>${row.requestId}</b></td>
+                        <td>${row.date}</td>
+                        <td>${row.requesterName}</td>
+                        <td>${row.department}</td>
+                        <td>${row.itemName}</td>
+                        <td><b>${row.qty}</b></td>
+                        <td>${row.unit}</td>
+                        <td>${media}</td>
+                        <td>${row.remarks || '-'}</td>
+                    </tr>
+                `;
             });
+            tbody.innerHTML = html;
+        };
+
+        const script = document.createElement('script');
+        script.id = 'jsonpScript';
+        script.src = GOOGLE_SCRIPT_URL + '?callback=handleData';
+        script.onerror = function() {
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาตรวจสอบ Web App URL</td></tr>';
+        };
+        document.body.appendChild(script);
     }
 </script>
 </body>
