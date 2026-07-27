@@ -42,10 +42,10 @@
 
 <div class="container">
     <div class="header">
-        <h2>🛠️ Procurement Real-time Dashboard</h2>
+        <h2>🛠️ Procurement Real-time Dashboard (ขอซื้ออุปกรณ์สำนักงาน)</h2>
         <div>
             <button class="btn-refresh" onclick="loadData()">🔄 โหลดข้อมูลใหม่</button>
-            <!-- 🛑 อย่าลืมใส่ URL Google Sheets ของคุณที่ href ด้านล่างนี้ -->
+            <!-- 🛑 อย่าลืมใส่ URL ของ Google Sheets ที่เปลี่ยนชื่อสิทธิ์ไว้แล้ว -->
             <a href="https://docs.google.com/spreadsheets/d/1M6A4MyIufBwwMUy7kOsoD0ZwPFVpd140UtWTtLV8tBg/edit?usp=sharing" target="_blank" class="btn-sheet">📊 เปิด Google Sheets</a>
         </div>
     </div>
@@ -74,7 +74,7 @@
 
 <script>
     const ADMIN_PASSWORD = "adminwantwant";
-    // 🛑 อย่าลืมใส่ Web App URL ที่นี่
+    // 🛑 อย่าลืมใส่ Web App URL ที่ได้จาก Google Apps Script
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEKqIMG_GeWwhRza27LgYnwkALPX7xdTBczzcuTzCds4_oeFRxVmmMlyNW1uEp5Os9/exec";
 
     function checkPass() {
@@ -86,7 +86,6 @@
         }
     }
 
-    // ฟังก์ชันดึงข้อมูลแบบ JSONP เพื่อข้ามขีดจำกัด CORS ของเบราว์เซอร์
     function loadData() {
         const tbody = document.getElementById('dataTable');
         tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">กำลังโหลดข้อมูลล่าสุด...</td></tr>';

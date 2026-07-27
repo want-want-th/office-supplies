@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเบิกอุปกรณ์สำนักงาน - Want Want Thailand</title>
+    <title>แบบฟอร์มขอซื้ออุปกรณ์สำนักงาน - Want Want Thailand</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #c8102e; --primary-hover: #9b0b21; --bg-color: #f8f9fa; --text: #212529; --border: #dee2e6; }
@@ -31,15 +31,15 @@
 
 <div class="container">
     <div class="header">
-        <h1>📦 ฟอร์มเบิกอุปกรณ์สำนักงาน</h1>
+        <h1>🛒 แบบฟอร์มขอซื้ออุปกรณ์สำนักงาน</h1>
         <p style="color: #6c757d;">บริษัท วอนท์ วอนท์ (ประเทศไทย) จำกัด</p>
     </div>
 
-    <div id="alertMsg" class="alert alert-success">บันทึกรายการสั่งซื้อเรียบร้อยแล้ว!</div>
+    <div id="alertMsg" class="alert alert-success">บันทึกรายการขอซื้ออุปกรณ์สำนักงานเรียบร้อยแล้ว!</div>
 
     <form id="requisitionForm">
         <div class="form-group">
-            <label>ชื่อ-นามสกุล ผู้ขอเบิก (Requester Name) *</label>
+            <label>ชื่อ-นามสกุล ผู้ขอซื้อ (Requester Name) *</label>
             <input type="text" id="empName" required placeholder="เช่น สมชาย ใจดี">
         </div>
         <div class="form-group">
@@ -57,7 +57,7 @@
         </div>
 
         <div class="form-group">
-            <label>รายการอุปกรณ์ที่ต้องการเบิก *</label>
+            <label>รายการอุปกรณ์สำนักงานที่ต้องการขอซื้อ *</label>
             <div id="itemsContainer">
                 <div class="item-card">
                     <button type="button" class="btn btn-remove" onclick="removeItem(this)">ลบรายการ</button>
@@ -94,7 +94,7 @@
             <textarea id="remark" rows="2" placeholder="เช่น ด่วนมาก / ใช้สำหรับจัดงานสัมมนา"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="submitBtn">ส่งรายการเบิกอุปกรณ์</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">ส่งรายการขอซื้ออุปกรณ์สำนักงาน</button>
     </form>
 </div>
 
@@ -174,12 +174,12 @@
             document.getElementById('alertMsg').style.display = 'block';
             document.getElementById('requisitionForm').reset();
             submitBtn.disabled = false;
-            submitBtn.innerText = "ส่งรายการเบิกอุปกรณ์";
+            submitBtn.innerText = "ส่งรายการขอซื้ออุปกรณ์สำนักงาน";
             setTimeout(() => { document.getElementById('alertMsg').style.display = 'none'; }, 4000);
         }).catch(err => {
             alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
             submitBtn.disabled = false;
-            submitBtn.innerText = "ส่งรายการเบิกอุปกรณ์";
+            submitBtn.innerText = "ส่งรายการขอซื้ออุปกรณ์สำนักงาน";
         });
     });
 </script>
