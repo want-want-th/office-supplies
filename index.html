@@ -11,7 +11,8 @@
         body { background-color: var(--bg-color); color: var(--text); padding: 20px; min-height: 100vh; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--primary); padding-bottom: 15px; }
-        .header h1 { color: var(--primary); font-size: 24px; margin-top: 10px; }
+        .logo { max-width: 140px; height: auto; margin-bottom: 8px; }
+        .header h1 { color: var(--primary); font-size: 24px; margin-top: 5px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; }
@@ -31,7 +32,8 @@
 
 <div class="container">
     <div class="header">
-        <h1>🛒 แบบฟอร์มขอซื้ออุปกรณ์สำนักงาน</h1>
+        <img src="logo.png" alt="Want Want Logo" class="logo">
+        <h1>แบบฟอร์มขอซื้ออุปกรณ์สำนักงาน</h1>
         <p style="color: #6c757d;">บริษัท วอนท์ วอนท์ (ประเทศไทย) จำกัด</p>
     </div>
 
@@ -39,8 +41,8 @@
 
     <form id="requisitionForm">
         <div class="form-group">
-            <label>ชื่อ-นามสกุล ผู้ขอซื้อ (Requester Name) *</label>
-            <input type="text" id="empName" required placeholder="เช่น สมชาย ใจดี">
+            <label>ชื่อ ผู้ขอซื้อ (Requester Name) *</label>
+            <input type="text" id="empName" required placeholder="เช่น สมชาย">
         </div>
         <div class="form-group">
             <label>แผนก (Department) *</label>
@@ -82,7 +84,7 @@
                     </div>
                     <div class="item-links">
                         <input type="url" class="item-ofm" placeholder="ลิงก์สินค้า OFM / เว็บไซต์ (ถ้ามี)">
-                        <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ)">
+                        <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ) (ถ้ามี)">
                     </div>
                 </div>
             </div>
@@ -100,7 +102,7 @@
 
 <script>
     // 🛑 นำ Web App URL ที่ได้จาก Google Apps Script มาวางแทนที่บรรทัดนี้
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEKqIMG_GeWwhRza27LgYnwkALPX7xdTBczzcuTzCds4_oeFRxVmmMlyNW1uEp5Os9/exec";
+    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
     function addItem() {
         const container = document.getElementById('itemsContainer');
@@ -125,7 +127,7 @@
             </div>
             <div class="item-links">
                 <input type="url" class="item-ofm" placeholder="ลิงก์สินค้า OFM / เว็บไซต์ (ถ้ามี)">
-                <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ)">
+                <input type="url" class="item-img" placeholder="ลิงก์รูปภาพประกอบ (URL รูปภาพ) (ถ้ามี)">
             </div>
         `;
         container.appendChild(div);
